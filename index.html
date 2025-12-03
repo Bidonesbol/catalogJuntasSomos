@@ -264,7 +264,14 @@
       font-size: 0.85rem;
       color: var(--muted);
       text-align: center;
-      padding: 0 0.75rem;
+      padding: 0.75rem;
+    }
+
+    .product-image img {
+      max-height: 140px;
+      width: auto;
+      border-radius: 10px;
+      object-fit: cover;
     }
 
     .product-body {
@@ -395,6 +402,14 @@
       font-size: 0.9rem;
     }
 
+    #modalImageContainer img {
+      max-height: 220px;
+      width: auto;
+      border-radius: 12px;
+      margin-bottom: 0.5rem;
+      object-fit: cover;
+    }
+
     .modal-footer {
       padding: 0.8rem 1rem;
       border-top: 1px solid var(--border);
@@ -427,7 +442,6 @@
 
     select,
     input[type="number"],
-    input[type="text"],
     textarea {
       width: 100%;
       padding: 0.4rem 0.5rem;
@@ -615,7 +629,7 @@
       </div>
       <h1>Haz tu pedido desde nuestro catálogo online.</h1>
       <p class="lead">
-        Elige entre tazas, stickers, pins y “toma todo”. Agrega al carrito y envía tu pedido por WhatsApp.
+        Elige entre tazas, stickers, pins, toma todo y combos. Agrega al carrito y envía tu pedido por WhatsApp.
         Nosotros coordinamos el pago y la entrega manualmente.
       </p>
       <div class="hero-actions">
@@ -630,17 +644,16 @@
     <div class="hero-panel">
       <h2>Sobre este catálogo</h2>
       <p style="font-size:0.85rem;color:var(--muted);">
-        Catálogo sencillo, pensado para pocos productos y pedidos manuales.
-        Ideal para compartir en redes y recibir pedidos por WhatsApp.
+        Presentar el proyecto y/o lo que se espera lograr con la campaña.
       </p>
       <div class="hero-grid">
         <div class="hero-mini-card">
-          <strong>5 productos</strong>
-          <span>Tazas, stickers, pins y toma todo.</span>
+          <strong>6 productos</strong>
+          <span>Tazas, stickers, pins, toma todo y combos.</span>
         </div>
         <div class="hero-mini-card">
           <strong>Variantes claras</strong>
-          <span>Opciones por tamaño, pack o diseño.</span>
+          <span>Opciones por tamaño, pack o combo.</span>
         </div>
         <div class="hero-mini-card">
           <strong>Sin pagos automáticos</strong>
@@ -672,7 +685,7 @@
       <div class="step-card">
         <div class="step-number">1</div>
         <h3>Explora los productos</h3>
-        <p>Elige el tipo de producto (taza, sticker, pin, toma todo) y revisa precios y opciones.</p>
+        <p>Elige el tipo de producto (taza, sticker, pin, toma todo, combos) y revisa precios y opciones.</p>
       </div>
       <div class="step-card">
         <div class="step-number">2</div>
@@ -698,6 +711,9 @@
       <button class="close-btn" type="button" onclick="closeProductModal()">×</button>
     </div>
     <div class="modal-body">
+      <div id="modalImageContainer" style="margin-bottom:0.75rem;">
+        <!-- imagen variante -->
+      </div>
       <p id="modalProductDescription" style="margin-bottom:0.75rem;"></p>
       <div class="modal-form-group">
         <label for="variantSelect">Variante</label>
@@ -760,82 +776,138 @@
 </aside>
 
 <script>
-  // ========= CONFIGURACIÓN =========
-
   // ⚠️ CAMBIA ESTE NÚMERO AL TUYO (sin +, sin espacios)
-  const WHATSAPP_NUMBER = "59163199327";
+  const WHATSAPP_NUMBER = "59163299327";
 
-  // Catálogo basado en tu lista:
-  // - TAZA 11 OZ - sin variante - 60 Bs
-  // - TAZA 6 OZ  - sin variante - 50 Bs
-  // - STICKERS   - sticker individual 5 Bs / hoja completa 20 Bs
-  // - PINS       - 3 variantes, todos 15 Bs
-  // - TOMA TODO  - 1 variante, 100 Bs
-
+  // Productos con imágenes según tus nombres de archivo
   const products = [
-  {
-    id: "taza11",
-    name: "Taza 11 oz",
-    description: "Taza de cerámica 11 oz, ideal para café o té.",
-    baseImageText: "Taza 11 oz",
-    variants: [
-      { id: "taza11-std", name: "Taza 11 oz", price: 60 }
-    ]
-  },
-  {
-    id: "taza6",
-    name: "Taza 6 oz",
-    description: "Taza de cerámica 6 oz, perfecta para espresso o porciones pequeñas.",
-    baseImageText: "Taza 6 oz",
-    variants: [
-      { id: "taza6-std", name: "Taza 6 oz", price: 50 }
-    ]
-  },
-  {
-    id: "stickers",
-    name: "Stickers",
-    description: "Stickers con ilustraciones. Puedes pedir stickers sueltos o una hoja completa.",
-    baseImageText: "Stickers individuales o en hoja",
-    variants: [
-      { id: "stickers-unit", name: "Sticker individual", price: 5 },
-      { id: "stickers-page", name: "Hoja completa de stickers", price: 20 }
-    ]
-  },
-  {
-    id: "pins",
-    name: "Pins",
-    description: "Pins con distintos diseños. Cualquier variante tiene el mismo precio.",
-    baseImageText: "Pins con distintos diseños",
-    variants: [
-      { id: "pins-var1", name: "Pin diseño A", price: 15 },
-      { id: "pins-var2", name: "Pin diseño B", price: 15 },
-      { id: "pins-var3", name: "Pin diseño C", price: 15 }
-    ]
-  },
-  {
-    id: "toma-todo",
-    name: "Toma todo",
-    description: "Toma todo (vaso/jarro especial). Cualquier diseño se maneja como la misma variante.",
-    baseImageText: "Toma todo",
-    variants: [
-      { id: "toma-todo-std", name: "Toma todo", price: 100 }
-    ]
-  },
-  {
-    id: "combos",
-    name: "Combos",
-    description: "Combos especiales con combinaciones de tazas, stickers y pins.",
-    baseImageText: "Combos promocionales",
-    variants: [
-      { id: "combo1", name: "Combo 1: Taza 11 oz + Sticker + Pin", price: 75 },
-      { id: "combo2", name: "Combo 2: Taza 6 oz + Sticker + Pin", price: 65 },
-      { id: "combo3", name: "Combo 3: Sticker + Pin", price: 15 },
-      { id: "combo4", name: "Combo 4: Taza 11 oz + Taza 6 oz + Sticker + Pin", price: 120 }
-    ]
-  }
-];
-
-  // ========= ESTADO CARRITO =========
+    {
+      id: "taza11",
+      name: "Taza 11 oz",
+      description: "Taza de cerámica 11 oz, ideal para café o té.",
+      baseImageText: "Taza 11 oz",
+      baseImage: "images/taza11-main.jpg",
+      variants: [
+        {
+          id: "taza11-std",
+          name: "Taza 11 oz",
+          price: 60,
+          image: "images/taza11-std.jpg"
+        }
+      ]
+    },
+    {
+      id: "taza6",
+      name: "Taza 6 oz",
+      description: "Taza de cerámica 6 oz, perfecta para espresso o porciones pequeñas.",
+      baseImageText: "Taza 6 oz",
+      baseImage: "images/taza6-main.jpg",
+      variants: [
+        {
+          id: "taza6-std",
+          name: "Taza 6 oz",
+          price: 50,
+          image: "images/taza6-std.jpg"
+        }
+      ]
+    },
+    {
+      id: "stickers",
+      name: "Stickers",
+      description: "Stickers con ilustraciones. Puedes pedir stickers sueltos o una hoja completa.",
+      baseImageText: "Stickers individuales o en hoja",
+      baseImage: "images/stickers-main.jpg",
+      variants: [
+        {
+          id: "stickers-unit",
+          name: "Sticker individual",
+          price: 5,
+          image: "images/stickers-unit.jpg"
+        },
+        {
+          id: "stickers-page",
+          name: "Hoja completa de stickers",
+          price: 20,
+          image: "images/stickers-page.jpg"
+        }
+      ]
+    },
+    {
+      id: "pins",
+      name: "Pins",
+      description: "Pins con distintos diseños. Cualquier variante tiene el mismo precio.",
+      baseImageText: "Pins con distintos diseños",
+      baseImage: "images/pins-main.jpg",
+      variants: [
+        {
+          id: "pins-var1",
+          name: "Pin diseño A",
+          price: 15,
+          image: "images/pins-var1.jpg"
+        },
+        {
+          id: "pins-var2",
+          name: "Pin diseño B",
+          price: 15,
+          image: "images/pins-var2.jpg"
+        },
+        {
+          id: "pins-var3",
+          name: "Pin diseño C",
+          price: 15,
+          image: "images/pins-var3.jpg"
+        }
+      ]
+    },
+    {
+      id: "toma-todo",
+      name: "Toma todo",
+      description: "Toma todo (vaso/jarro especial). Cualquier diseño se maneja como la misma variante.",
+      baseImageText: "Toma todo",
+      baseImage: "images/toma-todo-main.jpg",
+      variants: [
+        {
+          id: "toma-todo-std",
+          name: "Toma todo",
+          price: 100,
+          image: "images/toma-todo-std.jpg"
+        }
+      ]
+    },
+    {
+      id: "combos",
+      name: "Combos",
+      description: "Combos especiales con combinaciones de tazas, stickers y pins.",
+      baseImageText: "Combos promocionales",
+      baseImage: "images/combos-main.jpg",
+      variants: [
+        {
+          id: "combo1",
+          name: "Combo 1: Taza 11 oz + Sticker + Pin",
+          price: 75,
+          image: "images/combo1.jpg"
+        },
+        {
+          id: "combo2",
+          name: "Combo 2: Taza 6 oz + Sticker + Pin",
+          price: 65,
+          image: "images/combo2.jpg"
+        },
+        {
+          id: "combo3",
+          name: "Combo 3: Sticker + Pin",
+          price: 15,
+          image: "images/combo3.jpg"
+        },
+        {
+          id: "combo4",
+          name: "Combo 4: Taza 11 oz + Taza 6 oz + Sticker + Pin",
+          price: 120,
+          image: "images/combo4.jpg"
+        }
+      ]
+    }
+  ];
 
   let cart = [];
   let currentProduct = null;
@@ -852,17 +924,17 @@
       card.className = "product-card";
       card.innerHTML = `
         <div class="product-image">
-          <span>${product.baseImageText || "Imagen del producto"}</span>
+          ${
+            product.baseImage
+              ? `<img src="${product.baseImage}" alt="${product.name}" />`
+              : `<span>${product.baseImageText || "Imagen del producto"}</span>`
+          }
         </div>
         <div class="product-body">
           <div class="product-title">${product.name}</div>
           <div class="product-description">${product.description}</div>
           <div class="product-meta">
-            <span>${
-              numVariants === 1
-                ? "1 variante"
-                : numVariants + " variantes"
-            }</span>
+            <span>${numVariants === 1 ? "1 variante" : numVariants + " variantes"}</span>
             <span class="price-chip">Desde Bs ${minPrice}</span>
           </div>
           <div class="product-actions">
@@ -893,6 +965,7 @@
     const variantSelect = document.getElementById("variantSelect");
     const quantityInput = document.getElementById("quantityInput");
     const noteInput = document.getElementById("noteInput");
+    const imageContainer = document.getElementById("modalImageContainer");
 
     titleEl.textContent = product.name;
     descEl.textContent = product.description;
@@ -906,6 +979,15 @@
       option.textContent = `${variant.name} · Bs ${variant.price}`;
       variantSelect.appendChild(option);
     });
+
+    const firstVariant = product.variants[0];
+    if (firstVariant && firstVariant.image) {
+      imageContainer.innerHTML = `<img src="${firstVariant.image}" alt="${firstVariant.name}" />`;
+    } else if (product.baseImage) {
+      imageContainer.innerHTML = `<img src="${product.baseImage}" alt="${product.name}" />`;
+    } else {
+      imageContainer.innerHTML = "";
+    }
 
     updateModalPricePreview();
     backdrop.style.display = "flex";
@@ -922,6 +1004,7 @@
     const variantSelect = document.getElementById("variantSelect");
     const quantityInput = document.getElementById("quantityInput");
     const pricePreview = document.getElementById("modalPricePreview");
+    const imageContainer = document.getElementById("modalImageContainer");
 
     const variant = currentProduct.variants.find(
       (v) => v.id === variantSelect.value
@@ -930,11 +1013,20 @@
 
     if (!variant) {
       pricePreview.textContent = "-";
+      imageContainer.innerHTML = currentProduct.baseImage
+        ? `<img src="${currentProduct.baseImage}" alt="${currentProduct.name}" />`
+        : "";
       return;
     }
 
     const total = variant.price * qty;
     pricePreview.textContent = `Bs ${total}`;
+
+    if (variant.image) {
+      imageContainer.innerHTML = `<img src="${variant.image}" alt="${variant.name}" />`;
+    } else if (currentProduct.baseImage) {
+      imageContainer.innerHTML = `<img src="${currentProduct.baseImage}" alt="${currentProduct.name}" />`;
+    }
   }
 
   document
