@@ -763,7 +763,7 @@
   // ========= CONFIGURACIÓN =========
 
   // ⚠️ CAMBIA ESTE NÚMERO AL TUYO (sin +, sin espacios)
-  const WHATSAPP_NUMBER = "59170000000";
+  const WHATSAPP_NUMBER = "59163199327";
 
   // Catálogo basado en tu lista:
   // - TAZA 11 OZ - sin variante - 60 Bs
@@ -773,55 +773,67 @@
   // - TOMA TODO  - 1 variante, 100 Bs
 
   const products = [
-    {
-      id: "taza11",
-      name: "Taza 11 oz",
-      description: "Taza de cerámica 11 oz, ideal para café o té.",
-      baseImageText: "Taza 11 oz",
-      variants: [
-        { id: "taza11-std", name: "Taza 11 oz", price: 60 }
-      ]
-    },
-    {
-      id: "taza6",
-      name: "Taza 6 oz",
-      description: "Taza de cerámica 6 oz, perfecta para espresso o porciones pequeñas.",
-      baseImageText: "Taza 6 oz",
-      variants: [
-        { id: "taza6-std", name: "Taza 6 oz", price: 50 }
-      ]
-    },
-    {
-      id: "stickers",
-      name: "Stickers",
-      description: "Stickers con ilustraciones. Puedes pedir stickers sueltos o una hoja completa.",
-      baseImageText: "Stickers individuales o en hoja",
-      variants: [
-        { id: "stickers-unit", name: "Sticker individual", price: 5 },
-        { id: "stickers-page", name: "Hoja completa de stickers", price: 20 }
-      ]
-    },
-    {
-      id: "pins",
-      name: "Pins",
-      description: "Pins con distintos diseños. Cualquier variante tiene el mismo precio.",
-      baseImageText: "Pins con distintos diseños",
-      variants: [
-        { id: "pins-var1", name: "Pin diseño A", price: 15 },
-        { id: "pins-var2", name: "Pin diseño B", price: 15 },
-        { id: "pins-var3", name: "Pin diseño C", price: 15 }
-      ]
-    },
-    {
-      id: "toma-todo",
-      name: "Toma todo",
-      description: "Toma todo (vaso/jarro especial). Cualquier diseño se maneja como la misma variante.",
-      baseImageText: "Toma todo",
-      variants: [
-        { id: "toma-todo-std", name: "Toma todo", price: 100 }
-      ]
-    }
-  ];
+  {
+    id: "taza11",
+    name: "Taza 11 oz",
+    description: "Taza de cerámica 11 oz, ideal para café o té.",
+    baseImageText: "Taza 11 oz",
+    variants: [
+      { id: "taza11-std", name: "Taza 11 oz", price: 60 }
+    ]
+  },
+  {
+    id: "taza6",
+    name: "Taza 6 oz",
+    description: "Taza de cerámica 6 oz, perfecta para espresso o porciones pequeñas.",
+    baseImageText: "Taza 6 oz",
+    variants: [
+      { id: "taza6-std", name: "Taza 6 oz", price: 50 }
+    ]
+  },
+  {
+    id: "stickers",
+    name: "Stickers",
+    description: "Stickers con ilustraciones. Puedes pedir stickers sueltos o una hoja completa.",
+    baseImageText: "Stickers individuales o en hoja",
+    variants: [
+      { id: "stickers-unit", name: "Sticker individual", price: 5 },
+      { id: "stickers-page", name: "Hoja completa de stickers", price: 20 }
+    ]
+  },
+  {
+    id: "pins",
+    name: "Pins",
+    description: "Pins con distintos diseños. Cualquier variante tiene el mismo precio.",
+    baseImageText: "Pins con distintos diseños",
+    variants: [
+      { id: "pins-var1", name: "Pin diseño A", price: 15 },
+      { id: "pins-var2", name: "Pin diseño B", price: 15 },
+      { id: "pins-var3", name: "Pin diseño C", price: 15 }
+    ]
+  },
+  {
+    id: "toma-todo",
+    name: "Toma todo",
+    description: "Toma todo (vaso/jarro especial). Cualquier diseño se maneja como la misma variante.",
+    baseImageText: "Toma todo",
+    variants: [
+      { id: "toma-todo-std", name: "Toma todo", price: 100 }
+    ]
+  },
+  {
+    id: "combos",
+    name: "Combos",
+    description: "Combos especiales con combinaciones de tazas, stickers y pins.",
+    baseImageText: "Combos promocionales",
+    variants: [
+      { id: "combo1", name: "Combo 1: Taza 11 oz + Sticker + Pin", price: 75 },
+      { id: "combo2", name: "Combo 2: Taza 6 oz + Sticker + Pin", price: 65 },
+      { id: "combo3", name: "Combo 3: Sticker + Pin", price: 15 },
+      { id: "combo4", name: "Combo 4: Taza 11 oz + Taza 6 oz + Sticker + Pin", price: 120 }
+    ]
+  }
+];
 
   // ========= ESTADO CARRITO =========
 
