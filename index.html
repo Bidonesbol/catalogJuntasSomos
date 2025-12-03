@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <title>Simple Catalog | Order Gateway</title>
+  <title>Catálogo | Tazas, Stickers, Pins y Toma Todo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
     :root {
@@ -42,7 +42,6 @@
       display: block;
     }
 
-    /* Layout */
     header {
       position: sticky;
       top: 0;
@@ -120,7 +119,6 @@
       margin-bottom: 3rem;
     }
 
-    /* Hero / Home */
     #home {
       display: grid;
       grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
@@ -229,7 +227,6 @@
       font-size: 0.85rem;
     }
 
-    /* Catalog */
     #catalog h2,
     #how-it-works h2 {
       font-size: 1.5rem;
@@ -266,6 +263,8 @@
       justify-content: center;
       font-size: 0.85rem;
       color: var(--muted);
+      text-align: center;
+      padding: 0 0.75rem;
     }
 
     .product-body {
@@ -317,7 +316,6 @@
       font-weight: 500;
     }
 
-    /* How it works */
     .steps-grid {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -358,7 +356,6 @@
       font-size: 0.85rem;
     }
 
-    /* Product modal (showcase page feeling) */
     .modal-backdrop {
       position: fixed;
       inset: 0;
@@ -458,7 +455,6 @@
       gap: 0.6rem;
     }
 
-    /* Cart drawer */
     .cart-drawer {
       position: fixed;
       right: 0;
@@ -547,7 +543,6 @@
       margin-top: 0.25rem;
     }
 
-    /* Utility */
     .tag {
       display: inline-flex;
       padding: 0.1rem 0.5rem;
@@ -558,20 +553,16 @@
       font-weight: 500;
     }
 
-    /* Responsive */
     @media (max-width: 900px) {
       #home {
         grid-template-columns: minmax(0, 1fr);
       }
-
       .hero-panel {
         order: -1;
       }
-
       .catalog-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
       }
-
       .steps-grid {
         grid-template-columns: minmax(0, 1fr);
       }
@@ -582,16 +573,13 @@
         flex-wrap: wrap;
         justify-content: space-between;
       }
-
       .catalog-grid {
         grid-template-columns: minmax(0, 1fr);
       }
-
       .hero-actions {
         flex-direction: column;
         align-items: stretch;
       }
-
       .hero-actions .btn {
         width: 100%;
         justify-content: center;
@@ -620,16 +608,15 @@
 </header>
 
 <main>
-  <!-- HOME / INFO -->
   <section id="home">
     <div>
       <div class="pill">
-        🧺 Pedidos en línea · Entrega en Bolivia
+        🎨 Tazas, stickers, pins y toma todo · Bolivia
       </div>
-      <h1>Simple catálogo online con pedidos por WhatsApp.</h1>
+      <h1>Haz tu pedido desde nuestro catálogo online.</h1>
       <p class="lead">
-        Navega por el catálogo, agrega productos al carrito y envía tu pedido.
-        Un miembro del equipo te contactará para coordinar el pago y la entrega.
+        Elige entre tazas, stickers, pins y “toma todo”. Agrega al carrito y envía tu pedido por WhatsApp.
+        Nosotros coordinamos el pago y la entrega manualmente.
       </p>
       <div class="hero-actions">
         <button class="btn btn-primary" onclick="scrollToSection('catalog')">
@@ -641,74 +628,69 @@
       </div>
     </div>
     <div class="hero-panel">
-      <h2>Resumen del catálogo</h2>
+      <h2>Sobre este catálogo</h2>
       <p style="font-size:0.85rem;color:var(--muted);">
-        Este es un ejemplo. Solo edita la lista de productos en el código
-        para adaptarlo a tu negocio (máx. 6 productos / 5 variantes).
+        Catálogo sencillo, pensado para pocos productos y pedidos manuales.
+        Ideal para compartir en redes y recibir pedidos por WhatsApp.
       </p>
       <div class="hero-grid">
         <div class="hero-mini-card">
-          <strong>6 productos</strong>
-          <span>Ideal para un catálogo pequeño y sencillo.</span>
+          <strong>5 productos</strong>
+          <span>Tazas, stickers, pins y toma todo.</span>
         </div>
         <div class="hero-mini-card">
-          <strong>Variantes por producto</strong>
-          <span>Hasta 5 variantes (tamaño, color, etc.) por cada producto.</span>
+          <strong>Variantes claras</strong>
+          <span>Opciones por tamaño, pack o diseño.</span>
         </div>
         <div class="hero-mini-card">
-          <strong>Sin pago automático</strong>
-          <span>Los pedidos llegan por WhatsApp; el cobro es manual.</span>
+          <strong>Sin pagos automáticos</strong>
+          <span>Solo recibimos el pedido, el cobro es manual.</span>
         </div>
         <div class="hero-mini-card">
           <strong>100% estático</strong>
-          <span>No requiere base de datos: solo HTML + CSS + JavaScript.</span>
+          <span>No requiere base de datos ni servidor.</span>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- CATALOG -->
   <section id="catalog">
     <h2>Catálogo</h2>
     <p class="section-lead">
-      Haz clic en “Ver” para abrir la ficha del producto, elegir variantes y agregar al carrito.
+      Haz clic en “Ver” para abrir la ficha del producto, elegir variantes (si las hay) y agregar al carrito.
     </p>
-    <div class="catalog-grid" id="catalogGrid">
-      <!-- Products rendered by JS -->
-    </div>
+    <div class="catalog-grid" id="catalogGrid"></div>
   </section>
 
-  <!-- HOW IT WORKS -->
   <section id="how-it-works">
     <h2>Cómo funciona el pedido</h2>
     <p style="color:var(--muted);font-size:0.95rem;">
-      Este sitio funciona como una puerta de entrada de pedidos. No hay pago automático:
-      simplemente llega un mensaje a WhatsApp con el detalle del pedido.
+      No hay pago automático en el sitio. El carrito sirve para organizar el pedido y enviarlo por WhatsApp.
+      Luego coordinamos todo contigo.
     </p>
     <div class="steps-grid">
       <div class="step-card">
         <div class="step-number">1</div>
-        <h3>Explora el catálogo</h3>
-        <p>Revisa las fichas de producto, precios y variantes disponibles.</p>
+        <h3>Explora los productos</h3>
+        <p>Elige el tipo de producto (taza, sticker, pin, toma todo) y revisa precios y opciones.</p>
       </div>
       <div class="step-card">
         <div class="step-number">2</div>
-        <h3>Agrega al carrito</h3>
-        <p>Selecciona las variantes y cantidades que necesites, y revisa el carrito.</p>
+        <h3>Arma tu carrito</h3>
+        <p>Selecciona variantes y cantidades. Puedes dejar notas en cada producto.</p>
       </div>
       <div class="step-card">
         <div class="step-number">3</div>
-        <h3>Envía tu pedido</h3>
+        <h3>Envía el pedido</h3>
         <p>
-          Envía el pedido por WhatsApp. Una persona lo recibirá y se pondrá
-          en contacto para coordinar pago y entrega.
+          Envía el detalle por WhatsApp. Te responderemos para confirmar el total, forma de pago
+          y detalles de entrega.
         </p>
       </div>
     </div>
   </section>
 </main>
 
-<!-- PRODUCT MODAL (showcase) -->
 <div class="modal-backdrop" id="productModalBackdrop">
   <div class="modal">
     <div class="modal-header">
@@ -734,8 +716,8 @@
         </div>
       </div>
       <div class="modal-form-group">
-        <label for="noteInput">Nota opcional (color, detalle, referencia, etc.)</label>
-        <textarea id="noteInput" placeholder="Ej: Entregar solo en la tarde."></textarea>
+        <label for="noteInput">Nota opcional (nombre, diseño, referencia, etc.)</label>
+        <textarea id="noteInput" placeholder="Ej: Diseño X, entregar solo tardes."></textarea>
       </div>
       <div class="small-note">
         <span class="tag">Importante</span>
@@ -754,22 +736,19 @@
   </div>
 </div>
 
-<!-- CART DRAWER -->
 <aside class="cart-drawer" id="cartDrawer">
   <div class="cart-header">
     <h2>Carrito</h2>
     <button class="close-btn" type="button" onclick="toggleCart(false)">×</button>
   </div>
-  <div class="cart-items" id="cartItemsContainer">
-    <!-- Items rendered by JS -->
-  </div>
+  <div class="cart-items" id="cartItemsContainer"></div>
   <div class="cart-footer">
     <div class="cart-summary">
       <div>Total estimado</div>
       <div id="cartTotal"><strong>Bs 0</strong></div>
     </div>
     <div class="small-note">
-      El total es solo una referencia. El precio final y el envío se confirmarán manualmente.
+      El total es de referencia. El precio final y el envío se confirman por WhatsApp.
     </div>
     <button class="btn btn-primary" type="button" onclick="sendOrderViaWhatsApp()">
       Enviar pedido por WhatsApp
@@ -781,91 +760,73 @@
 </aside>
 
 <script>
-  // =======================
-  // CONFIGURACIÓN BÁSICA
-  // =======================
+  // ========= CONFIGURACIÓN =========
 
-  // Cambia este número a tu número de WhatsApp (con código de país, sin +, sin espacios)
-  const WHATSAPP_NUMBER = "59170000000"; // Ejemplo Bolivia (591 + número)
+  // ⚠️ CAMBIA ESTE NÚMERO AL TUYO (sin +, sin espacios)
+  const WHATSAPP_NUMBER = "59170000000";
 
-  // Define tus productos aquí (máx. 6 productos, 5 variantes c/u)
+  // Catálogo basado en tu lista:
+  // - TAZA 11 OZ - sin variante - 60 Bs
+  // - TAZA 6 OZ  - sin variante - 50 Bs
+  // - STICKERS   - sticker individual 5 Bs / hoja completa 20 Bs
+  // - PINS       - 3 variantes, todos 15 Bs
+  // - TOMA TODO  - 1 variante, 100 Bs
+
   const products = [
     {
-      id: "prod1",
-      name: "Café de Altura 250g",
-      description: "Café boliviano de altura, molido o en grano, tostado medio.",
-      baseImageText: "Foto del café",
+      id: "taza11",
+      name: "Taza 11 oz",
+      description: "Taza de cerámica 11 oz, ideal para café o té.",
+      baseImageText: "Taza 11 oz",
       variants: [
-        { id: "prod1-var1", name: "Molido 250g", price: 40 },
-        { id: "prod1-var2", name: "En grano 250g", price: 38 }
+        { id: "taza11-std", name: "Taza 11 oz", price: 60 }
       ]
     },
     {
-      id: "prod2",
-      name: "Café de Altura 1kg",
-      description: "Presentación económica de 1kg para consumo frecuente.",
-      baseImageText: "Foto café 1kg",
+      id: "taza6",
+      name: "Taza 6 oz",
+      description: "Taza de cerámica 6 oz, perfecta para espresso o porciones pequeñas.",
+      baseImageText: "Taza 6 oz",
       variants: [
-        { id: "prod2-var1", name: "Molido 1kg", price: 130 },
-        { id: "prod2-var2", name: "En grano 1kg", price: 125 }
+        { id: "taza6-std", name: "Taza 6 oz", price: 50 }
       ]
     },
     {
-      id: "prod3",
-      name: "Taza cerámica",
-      description: "Taza cerámica resistente, ideal para café o té.",
-      baseImageText: "Foto de la taza",
+      id: "stickers",
+      name: "Stickers",
+      description: "Stickers con ilustraciones. Puedes pedir stickers sueltos o una hoja completa.",
+      baseImageText: "Stickers individuales o en hoja",
       variants: [
-        { id: "prod3-var1", name: "Blanca", price: 35 },
-        { id: "prod3-var2", name: "Negra", price: 35 },
-        { id: "prod3-var3", name: "Roja", price: 38 }
+        { id: "stickers-unit", name: "Sticker individual", price: 5 },
+        { id: "stickers-page", name: "Hoja completa de stickers", price: 20 }
       ]
     },
     {
-      id: "prod4",
-      name: "Filtro reutilizable",
-      description: "Filtro metálico reutilizable para cafetera V60.",
-      baseImageText: "Foto del filtro",
+      id: "pins",
+      name: "Pins",
+      description: "Pins con distintos diseños. Cualquier variante tiene el mismo precio.",
+      baseImageText: "Pins con distintos diseños",
       variants: [
-        { id: "prod4-var1", name: "Tamaño pequeño", price: 55 },
-        { id: "prod4-var2", name: "Tamaño grande", price: 60 }
+        { id: "pins-var1", name: "Pin diseño A", price: 15 },
+        { id: "pins-var2", name: "Pin diseño B", price: 15 },
+        { id: "pins-var3", name: "Pin diseño C", price: 15 }
       ]
     },
     {
-      id: "prod5",
-      name: "Set de regalo",
-      description: "Caja de regalo con café, taza y filtro.",
-      baseImageText: "Foto set de regalo",
+      id: "toma-todo",
+      name: "Toma todo",
+      description: "Toma todo (vaso/jarro especial). Cualquier diseño se maneja como la misma variante.",
+      baseImageText: "Toma todo",
       variants: [
-        { id: "prod5-var1", name: "Set estándar", price: 180 },
-        { id: "prod5-var2", name: "Set premium", price: 230 }
-      ]
-    },
-    {
-      id: "prod6",
-      name: "Termo de acero",
-      description: "Termo de acero inoxidable, mantiene la bebida caliente por horas.",
-      baseImageText: "Foto termo",
-      variants: [
-        { id: "prod6-var1", name: "500 ml", price: 95 },
-        { id: "prod6-var2", name: "750 ml", price: 110 }
+        { id: "toma-todo-std", name: "Toma todo", price: 100 }
       ]
     }
   ];
 
-  // =======================
-  // ESTADO DEL CARRITO
-  // =======================
+  // ========= ESTADO CARRITO =========
 
-  // Cada item: { productId, variantId, quantity, note }
   let cart = [];
-
-  // Estado del producto actual en el modal
   let currentProduct = null;
-
-  // =======================
-  // RENDER DEL CATÁLOGO
-  // =======================
 
   function renderCatalog() {
     const grid = document.getElementById("catalogGrid");
@@ -873,7 +834,7 @@
 
     products.forEach((product) => {
       const minPrice = Math.min(...product.variants.map((v) => v.price));
-      const maxVariants = product.variants.length;
+      const numVariants = product.variants.length;
 
       const card = document.createElement("article");
       card.className = "product-card";
@@ -885,7 +846,11 @@
           <div class="product-title">${product.name}</div>
           <div class="product-description">${product.description}</div>
           <div class="product-meta">
-            <span>Variantes: ${maxVariants}</span>
+            <span>${
+              numVariants === 1
+                ? "1 variante"
+                : numVariants + " variantes"
+            }</span>
             <span class="price-chip">Desde Bs ${minPrice}</span>
           </div>
           <div class="product-actions">
@@ -903,10 +868,6 @@
       grid.appendChild(card);
     });
   }
-
-  // =======================
-  // MODAL DE PRODUCTO
-  // =======================
 
   function openProductModal(productId) {
     const product = products.find((p) => p.id === productId);
@@ -926,7 +887,6 @@
     quantityInput.value = 1;
     noteInput.value = "";
 
-    // Render variants
     variantSelect.innerHTML = "";
     product.variants.forEach((variant) => {
       const option = document.createElement("option");
@@ -995,7 +955,6 @@
     toggleCart(true);
   }
 
-  // Agregar rápido: primera variante, cantidad 1
   function quickAddFirstVariant(productId) {
     const product = products.find((p) => p.id === productId);
     if (!product || product.variants.length === 0) return;
@@ -1011,10 +970,6 @@
     updateCartUI();
     toggleCart(true);
   }
-
-  // =======================
-  // CARRITO
-  // =======================
 
   function toggleCart(open) {
     const drawer = document.getElementById("cartDrawer");
@@ -1136,10 +1091,6 @@
     window.open(url, "_blank");
   }
 
-  // =======================
-  // UTILIDADES
-  // =======================
-
   function scrollToSection(id) {
     const section = document.getElementById(id);
     if (!section) return;
@@ -1150,7 +1101,6 @@
     .getElementById("openCartButton")
     .addEventListener("click", () => toggleCart(true));
 
-  // Cerrar modal si se hace clic fuera
   document
     .getElementById("productModalBackdrop")
     .addEventListener("click", (e) => {
@@ -1159,7 +1109,6 @@
       }
     });
 
-  // Inicializar
   renderCatalog();
   updateCartUI();
 </script>
