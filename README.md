@@ -195,3 +195,53 @@ El pie de página incluye enlaces a las redes de La Chiflería:
 
 Estos clics también están instrumentados con GA4.
 
+---
+
+# 📐 Registro de pedidos en Google Sheets
+
+El catálogo ahora registra cada pedido enviado por WhatsApp en una hoja de cálculo de Google Sheets.  
+Esto permite a la organización llevar control manual de ventas, pagos y entregas.
+
+## 🧾 ¿Qué datos se registran?
+
+Cada pedido genera automáticamente un **Order ID** único y guarda:
+
+- `order_id`
+- `created_at`
+- `name` (si el usuario lo ingresó)
+- `department`
+- `estimated_total`
+- `items_count`
+- `cart_json` (lista completa de productos y variantes)
+
+La hoja también incluye columnas para uso interno:
+
+- `status` → Pendiente / Pagado / Entregado / Cancelado  
+- `notes` → Observaciones internas  
+
+## 🔧 ¿Cómo funciona?
+
+1. Cuando el usuario presiona **Enviar pedido por WhatsApp**, el sistema:
+   - Genera un `order_id`
+   - Construye un objeto con toda la información del carrito
+   - Envía esta información al endpoint de Google Apps Script mediante `fetch()`
+   - Sigue abriendo WhatsApp normalmente (aunque el registro falle)
+
+2. El Apps Script recibe el JSON y agrega una nueva fila en la hoja `Orders`.
+
+## 🌐 Endpoint configurado
+
+El endpoint activo es:
+
+```
+https://script.google.com/macros/s/AKfycbwgX1knveA1LtFKzIM6nOOw6qI4P8lrdXzD6a_1_lpDQq_R7_COMLguGDRFH9P4B5aVeA/exec
+```
+
+## 📎 Ventajas del sistema
+
+- No requiere backend propio  
+- Funciona con GitHub Pages  
+- Permite administración manual de pedidos  
+- Cada pedido queda vinculado por ID al mensaje enviado por WhatsApp  
+
+---

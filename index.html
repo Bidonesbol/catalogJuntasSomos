@@ -976,9 +976,37 @@
   const WHATSAPP_NUMBER = "59176666946";
   //const WHATSAPP_NUMBER = "59163199327";
 
+  const ORDER_LOG_ENDPOINT = "https://script.google.com/macros/s/AKfycbwgX1knveA1LtFKzIM6nOOw6qI4P8lrdXzD6a_1_lpDQq_R7_COMLguGDRFH9P4B5aVeA/exec";
+
   function trackEvent(name, params = {}) {
     if (typeof gtag === "function") {
       gtag("event", name, params);
+    }
+  }
+
+  function generateOrderId() {
+    // Simple, reasonably unique ID: prefix + timestamp + random segment
+    return "JS-" + Date.now().toString(36) + "-" + Math.random().toString(36).substring(2, 8);
+  }
+
+  async function logOrderToSheet(payload) {
+    try {
+      // Use a "simple" POST request to avoid CORS preflight issues.
+      // Apps Script will receive the JSON string in e.postData.contents.
+      await fetch(ORDER_LOG_ENDPOINT, {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify(payload)
+      });
+
+      // We can't read the response in no-cors mode, so we just log that it was sent.
+      trackEvent("order_logged", {
+        order_id: payload.order_id || null
+      });
+    } catch (err) {
+      console.error("Failed to log order:", err);
+      trackEvent("order_log_failed", {});
     }
   }
 
@@ -1583,13 +1611,19 @@
       return;
     }
 
+    // Generate a unique Order ID for this checkout
+    const orderId = generateOrderId();
+
     const greeting = customerName
       ? `Hola, soy ${customerName} y quiero hacer el siguiente pedido desde el catálogo:\n`
       : "Hola, quiero hacer el siguiente pedido desde el catálogo:\n";
 
-    let message = greeting + `Departamento: ${department}\n\n`;
+    // Start message with Order ID so the organization can match it to the spreadsheet
+    let message = `*Orden ID:* ${orderId}\n\n` + greeting + `Departamento: ${department}\n\n`;
 
     let total = 0;
+    const cartItemsForLog = [];
+
     cart.forEach((item, i) => {
       const product = products.find((p) => p.id === item.productId);
       const variant = product
@@ -1610,17 +1644,41 @@
         message += `   Nota: ${item.note}\n`;
       }
       message += "\n";
+
+      cartItemsForLog.push({
+        product_id: item.productId,
+        product_name: name,
+        variant_id: item.variantId,
+        variant_name: variantName,
+        quantity: item.quantity,
+        unit_price: price,
+        line_total: lineTotal,
+        note: item.note || ""
+      });
     });
 
     message += `Total estimado (sin envío): Bs ${total}\n\n`;
     message +=
       "Por favor, confirmen el total final, forma de pago y costo/envío. Gracias.";
 
+    // Send order log to Google Sheets (fire-and-forget, we don't block the WhatsApp flow)
+    const logPayload = {
+      order_id: orderId,
+      created_at: new Date().toISOString(),
+      name: customerName || "",
+      department: department,
+      estimated_total: total,
+      cart_items_count: cart.length,
+      cart: cartItemsForLog
+    };
+    logOrderToSheet(logPayload);
+
     trackEvent("send_order_whatsapp", {
       cart_items_count: cart.length,
       estimated_total: total,
       department: department || "N/A",
-      has_name: !!customerName
+      has_name: !!customerName,
+      order_id: orderId
     });
 
     const url =
