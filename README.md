@@ -189,6 +189,51 @@ Si deseas, puedo configurarlo por ti.
 - Interfaz completamente responsiva  
 - Lista para publicar
 
+---
+
+## 📊 Google Analytics 4 (GA4) Integration
+
+El catálogo ahora incluye un sistema completo de analíticas con **Google Analytics 4**, permitiendo medir:
+
+### 🔥 Eventos principales incluidos
+- `view_product_detail` — cuando un usuario abre un producto.
+- `quick_add_product` — cuando añade un producto usando “Agregar rápido”.
+- `add_to_cart` — cuando añade desde el modal.
+- `open_cart` — cuando abre el carrito.
+- `remove_from_cart` — cuando elimina un ítem.
+- `clear_cart` — cuando se vacía el carrito.
+- `open_image_zoom` — cuando amplía una imagen de producto.
+- `scroll_to_section` — cuando navega a secciones del sitio.
+- `send_order_whatsapp` — **evento de conversión**, cuando envía el pedido por WhatsApp.
+
+### 🛠 Cómo funciona
+El archivo `index.html` incluye:
+- El script oficial de GA4 (`gtag.js`).
+- Una función utilitaria:
+
+```js
+function trackEvent(name, params = {}) {
+  if (typeof gtag === "function") {
+    gtag("event", name, params);
+  }
+}
+```
+
+Cada punto del flujo del usuario envía eventos con parámetros útiles como:
+- `product_id`
+- `product_name`
+- `variant_id`
+- `quantity`
+- `department`
+- `estimated_total`
+
+### 🎯 Conversión principal
+El evento `send_order_whatsapp` está diseñado como el **evento de conversión** del catálogo, ideal para medir ventas potenciales y rendimiento de campañas.
+
+### 🧪 Vista en tiempo real
+Puedes ver los eventos disparándose en:
+`Analytics → Realtime → Events`
+
 ---  
 
 ## 📘 Guías adicionales
