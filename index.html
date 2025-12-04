@@ -4,6 +4,15 @@
   <meta charset="UTF-8" />
   <title>Juntas Somos</title>
 
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-8W12SGRNJ8"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-8W12SGRNJ8');
+  </script>
+  
   <!-- Descripción para buscadores y previews (editable) -->
   <meta
     name="description"
@@ -967,6 +976,12 @@
   const WHATSAPP_NUMBER = "59176666946";
   //const WHATSAPP_NUMBER = "59163199327";
 
+  function trackEvent(name, params = {}) {
+    if (typeof gtag === "function") {
+      gtag("event", name, params);
+    }
+  }
+
   // Helpers for sold-out logic
   function isProductSoldOut(product) {
     // Product is sold out if the product flag is true OR all variants are sold out
@@ -1201,6 +1216,11 @@
     }
 
     currentProduct = product;
+
+    trackEvent("view_product_detail", {
+      product_id: product.id,
+      product_name: product.name
+    });
 
     const backdrop = document.getElementById("productModalBackdrop");
     const titleEl = document.getElementById("modalProductTitle");
