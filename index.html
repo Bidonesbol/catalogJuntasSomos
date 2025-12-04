@@ -1412,6 +1412,15 @@
       note: ""
     });
 
+    trackEvent("quick_add_product", {
+      product_id: product.id,
+      product_name: product.name,
+      variant_id: firstAvailable.id,
+      variant_name: firstAvailable.name,
+      price: firstAvailable.price,
+      quantity: 1
+    });
+
     updateCartUI();
     toggleCart(true);
   }
