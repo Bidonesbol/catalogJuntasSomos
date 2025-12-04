@@ -1339,6 +1339,13 @@
     }
     const img = document.querySelector("#modalImageContainer img");
     if (!img) return;
+
+    trackEvent("open_image_zoom", {
+      image_src: img.src,
+      image_alt: img.alt || "",
+      product_id: currentProduct ? currentProduct.id : null
+    });
+
     const zoomBackdrop = document.getElementById("imageZoomBackdrop");
     const zoomImg = document.getElementById("zoomedImage");
     zoomImg.src = img.src;
@@ -1436,10 +1443,20 @@
 
   function toggleCart(open) {
     const drawer = document.getElementById("cartDrawer");
+    let willBeOpen;
+
     if (typeof open === "boolean") {
+      willBeOpen = open;
       drawer.classList.toggle("open", open);
     } else {
+      willBeOpen = !drawer.classList.contains("open");
       drawer.classList.toggle("open");
+    }
+
+    if (willBeOpen) {
+      trackEvent("open_cart", {
+        cart_items_count: cart.length
+      });
     }
   }
 
@@ -1500,12 +1517,48 @@
   }
 
   function removeCartItem(index) {
+    const item = cart[index];
+
+    if (item) {
+      const product = products.find((p) => p.id === item.productId);
+      const variant = product
+        ? product.variants.find((v) => v.id === item.variantId)
+        : null;
+      const price = variant ? variant.price : 0;
+      const lineTotal = price * item.quantity;
+
+      trackEvent("remove_from_cart", {
+        product_id: item.productId,
+        product_name: product ? product.name : "Producto",
+        variant_id: item.variantId,
+        variant_name: variant ? variant.name : "Variante",
+        quantity: item.quantity,
+        line_total: lineTotal
+      });
+    }
+
     cart.splice(index, 1);
     updateCartUI();
   }
 
   function clearCart() {
     if (!confirm("¿Vaciar el carrito?")) return;
+
+    let previousTotal = 0;
+    cart.forEach((item) => {
+      const product = products.find((p) => p.id === item.productId);
+      const variant = product
+        ? product.variants.find((v) => v.id === item.variantId)
+        : null;
+      const price = variant ? variant.price : 0;
+      previousTotal += price * item.quantity;
+    });
+
+    trackEvent("clear_cart", {
+      previous_items_count: cart.length,
+      previous_total: previousTotal
+    });
+
     cart = [];
     updateCartUI();
     const nameInput = document.getElementById("customerName");
@@ -1563,6 +1616,13 @@
     message +=
       "Por favor, confirmen el total final, forma de pago y costo/envío. Gracias.";
 
+    trackEvent("send_order_whatsapp", {
+      cart_items_count: cart.length,
+      estimated_total: total,
+      department: department || "N/A",
+      has_name: !!customerName
+    });
+
     const url =
       "https://wa.me/" +
       WHATSAPP_NUMBER +
@@ -1575,6 +1635,11 @@
   function scrollToSection(id) {
     const section = document.getElementById(id);
     if (!section) return;
+
+    trackEvent("scroll_to_section", {
+      section_id: id
+    });
+
     section.scrollIntoView({ behavior: "smooth" });
   }
 
