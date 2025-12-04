@@ -1512,7 +1512,7 @@
 
     if (willBeOpen) {
       trackEvent("open_cart", {
-        cart_items_count: cart.length
+        cart_item_count: cart.length
       });
     }
   }
@@ -1707,7 +1707,7 @@
     logOrderToSheet(logPayload);
 
     trackEvent("send_order_whatsapp", {
-      cart_items_count: cart.length,
+      cart_item_count: cart.length,
       estimated_total: total,
       department: department || "N/A",
       has_name: !!customerName,
