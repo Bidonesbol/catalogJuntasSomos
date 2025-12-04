@@ -1671,10 +1671,22 @@
     <img src="images/chifleriaLogo.jpg" alt="La Chifleria Logo" style="height:50px; width:50px; border-radius:50%; object-fit:cover; box-shadow:0 2px 6px rgba(0,0,0,0.18);" />
   </div>
   <div style="display:flex; gap:1rem; justify-content:center; margin-top:0.25rem;">
-    <a href="https://www.facebook.com/profile.php?id=61576505622329" target="_blank" rel="noopener" style="color:var(--text); text-decoration:underline;">
+    <a
+      href="https://www.facebook.com/profile.php?id=61576505622329"
+      target="_blank"
+      rel="noopener"
+      style="color:var(--text); text-decoration:underline;"
+      onclick="trackEvent('click_social_link', { platform: 'facebook', url: this.href });"
+    >
       Facebook
     </a>
-    <a href="https://www.instagram.com/la_chifleria_bo/" target="_blank" rel="noopener" style="color:var(--text); text-decoration:underline;">
+    <a
+      href="https://www.instagram.com/la_chifleria_bo/"
+      target="_blank"
+      rel="noopener"
+      style="color:var(--text); text-decoration:underline;"
+      onclick="trackEvent('click_social_link', { platform: 'instagram', url: this.href });"
+    >
       Instagram
     </a>
   </div>
