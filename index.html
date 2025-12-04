@@ -1385,6 +1385,15 @@
       note
     });
 
+    trackEvent("add_to_cart", {
+      product_id: currentProduct.id,
+      product_name: currentProduct.name,
+      variant_id: variant.id,
+      variant_name: variant.name,
+      quantity: qty,
+      line_total: variant.price * qty
+    });
+
     updateCartUI();
     closeProductModal();
     toggleCart(true);
