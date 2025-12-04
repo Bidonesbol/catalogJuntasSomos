@@ -467,6 +467,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
+      position: relative;
     }
 
     #modalImageContainer img {
@@ -475,6 +476,61 @@
       border-radius: 12px;
       margin-bottom: 0.5rem;
       object-fit: cover;
+    }
+
+    .modal-zoom-icon {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      width: 24px;
+      height: 24px;
+      border-radius: 999px;
+      border: none;
+      background: rgba(0, 0, 0, 0.6);
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9rem;
+      cursor: pointer;
+      padding: 0;
+    }
+
+    /* Zoomed image overlay */
+    #imageZoomBackdrop {
+      cursor: zoom-out;
+    }
+
+    .image-zoom-wrapper {
+      max-width: 90vw;
+      max-height: 90vh;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    .image-zoom-wrapper img {
+      max-width: 100%;
+      max-height: 85vh;
+      border-radius: 16px;
+      box-shadow: 0 18px 40px rgba(15, 23, 42, 0.6);
+      background: #000000;
+    }
+
+    .image-zoom-close {
+      background: rgba(0, 0, 0, 0.6);
+      color: #ffffff;
+      border: none;
+      border-radius: 999px;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 1.1rem;
     }
 
     .modal-footer {
@@ -509,6 +565,7 @@
 
     select,
     input[type="number"],
+    input[type="text"],
     textarea {
       width: 100%;
       padding: 0.4rem 0.5rem;
@@ -517,10 +574,12 @@
       border: 1px solid var(--border);
       background: #f9fafb;
       outline: none;
+      box-sizing: border-box;
     }
 
     select:focus,
-    input:focus,
+    input[type="number"]:focus,
+    input[type="text"]:focus,
     textarea:focus {
       border-color: var(--primary);
       background: white;
@@ -604,6 +663,26 @@
       border-top: 1px solid var(--border);
       padding: 0.8rem 1rem 1rem;
       font-size: 0.9rem;
+    }
+
+    .checkout-form-group {
+      margin-top: 0.5rem;
+      font-size: 0.85rem;
+    }
+
+    .checkout-form-group label {
+      display: block;
+      margin-bottom: 0.2rem;
+      color: var(--text);
+    }
+
+    #customerName,
+    #customerDepartment {
+      color: var(--text);
+    }
+
+    #customerName::placeholder {
+      color: var(--muted);
     }
 
     .cart-summary {
@@ -799,6 +878,13 @@
   </div>
 </div>
 
+<div class="modal-backdrop" id="imageZoomBackdrop" style="display:none;">
+  <div class="image-zoom-wrapper">
+    <button class="image-zoom-close" type="button" onclick="closeImageZoom()">×</button>
+    <img id="zoomedImage" src="" alt="" />
+  </div>
+</div>
+
 <aside class="cart-drawer" id="cartDrawer">
   <div class="cart-header">
     <h2>Carrito</h2>
@@ -809,6 +895,26 @@
     <div class="cart-summary">
       <div>Total estimado</div>
       <div id="cartTotal"><strong>Bs 0</strong></div>
+    </div>
+    <div class="checkout-form-group">
+      <label for="customerName">Nombre</label>
+      <input type="text" id="customerName" placeholder="Tu nombre" />
+    </div>
+    <div class="checkout-form-group">
+      <label for="customerDepartment">Departamento</label>
+      <select id="customerDepartment">
+        <option value="">Selecciona una opción</option>
+        <option value="La Paz">La Paz</option>
+        <option value="Santa Cruz">Santa Cruz</option>
+        <option value="Cochabamba">Cochabamba</option>
+        <option value="Beni">Beni</option>
+        <option value="Chuquisaca">Chuquisaca</option>
+        <option value="Oruro">Oruro</option>
+        <option value="Pando">Pando</option>
+        <option value="Potosí">Potosí</option>
+        <option value="Tarija">Tarija</option>
+        <option value="Fuera de Bolivia">Fuera de Bolivia</option>
+      </select>
     </div>
     <div class="small-note">
       El total es de referencia. El precio final y el envío se confirman por WhatsApp.
@@ -824,8 +930,8 @@
 
 <script>
   // ⚠️ CAMBIA ESTE NÚMERO AL TUYO (sin +, sin espacios)
-  const WHATSAPP_NUMBER = "59176666946";
-
+  //const WHATSAPP_NUMBER = "59176666946";
+    const WHATSAPP_NUMBER = "59163199327";
   // Productos con imágenes según tus nombres de archivo
   const products = [
     {
@@ -1029,11 +1135,20 @@
 
     const firstVariant = product.variants[0];
     if (firstVariant && firstVariant.image) {
-      imageContainer.innerHTML = `<img src="${firstVariant.image}" alt="${firstVariant.name}" />`;
+      imageContainer.innerHTML = `
+        <img src="${firstVariant.image}" alt="${firstVariant.name}" />
+        <button type="button" class="modal-zoom-icon" aria-label="Ver imagen más grande" onclick="openImageZoom(event)">🔍</button>
+      `;
+      imageContainer.onclick = openImageZoom;
     } else if (product.baseImage) {
-      imageContainer.innerHTML = `<img src="${product.baseImage}" alt="${product.name}" />`;
+      imageContainer.innerHTML = `
+        <img src="${product.baseImage}" alt="${product.name}" />
+        <button type="button" class="modal-zoom-icon" aria-label="Ver imagen más grande" onclick="openImageZoom(event)">🔍</button>
+      `;
+      imageContainer.onclick = openImageZoom;
     } else {
       imageContainer.innerHTML = "";
+      imageContainer.onclick = null;
     }
 
     updateModalPricePreview();
@@ -1060,9 +1175,16 @@
 
     if (!variant) {
       pricePreview.textContent = "-";
-      imageContainer.innerHTML = currentProduct.baseImage
-        ? `<img src="${currentProduct.baseImage}" alt="${currentProduct.name}" />`
-        : "";
+      if (currentProduct.baseImage) {
+        imageContainer.innerHTML = `
+          <img src="${currentProduct.baseImage}" alt="${currentProduct.name}" />
+          <button type="button" class="modal-zoom-icon" aria-label="Ver imagen más grande" onclick="openImageZoom(event)">🔍</button>
+        `;
+        imageContainer.onclick = openImageZoom;
+      } else {
+        imageContainer.innerHTML = "";
+        imageContainer.onclick = null;
+      }
       return;
     }
 
@@ -1070,10 +1192,41 @@
     pricePreview.textContent = `Bs ${total}`;
 
     if (variant.image) {
-      imageContainer.innerHTML = `<img src="${variant.image}" alt="${variant.name}" />`;
+      imageContainer.innerHTML = `
+        <img src="${variant.image}" alt="${variant.name}" />
+        <button type="button" class="modal-zoom-icon" aria-label="Ver imagen más grande" onclick="openImageZoom(event)">🔍</button>
+      `;
+      imageContainer.onclick = openImageZoom;
     } else if (currentProduct.baseImage) {
-      imageContainer.innerHTML = `<img src="${currentProduct.baseImage}" alt="${currentProduct.name}" />`;
+      imageContainer.innerHTML = `
+        <img src="${currentProduct.baseImage}" alt="${currentProduct.name}" />
+        <button type="button" class="modal-zoom-icon" aria-label="Ver imagen más grande" onclick="openImageZoom(event)">🔍</button>
+      `;
+      imageContainer.onclick = openImageZoom;
+    } else {
+      imageContainer.innerHTML = "";
+      imageContainer.onclick = null;
     }
+  }
+
+  function openImageZoom(event) {
+    if (event) {
+      event.stopPropagation();
+    }
+    const img = document.querySelector("#modalImageContainer img");
+    if (!img) return;
+    const zoomBackdrop = document.getElementById("imageZoomBackdrop");
+    const zoomImg = document.getElementById("zoomedImage");
+    zoomImg.src = img.src;
+    zoomImg.alt = img.alt || "";
+    zoomBackdrop.style.display = "flex";
+  }
+
+  function closeImageZoom() {
+    const zoomBackdrop = document.getElementById("imageZoomBackdrop");
+    const zoomImg = document.getElementById("zoomedImage");
+    zoomBackdrop.style.display = "none";
+    zoomImg.src = "";
   }
 
   document
@@ -1196,6 +1349,10 @@
     if (!confirm("¿Vaciar el carrito?")) return;
     cart = [];
     updateCartUI();
+    const nameInput = document.getElementById("customerName");
+    const deptSelect = document.getElementById("customerDepartment");
+    if (nameInput) nameInput.value = "";
+    if (deptSelect) deptSelect.value = "";
   }
 
   function sendOrderViaWhatsApp() {
@@ -1204,7 +1361,21 @@
       return;
     }
 
-    let message = "Hola, quiero hacer el siguiente pedido desde el catálogo:\n\n";
+    const nameInput = document.getElementById("customerName");
+    const deptSelect = document.getElementById("customerDepartment");
+    const customerName = nameInput ? nameInput.value.trim() : "";
+    const department = deptSelect ? deptSelect.value : "";
+
+    if (!department) {
+      alert("Por favor, selecciona tu departamento antes de enviar el pedido.");
+      return;
+    }
+
+    const greeting = customerName
+      ? `Hola, soy ${customerName} y quiero hacer el siguiente pedido desde el catálogo:\n`
+      : "Hola, quiero hacer el siguiente pedido desde el catálogo:\n";
+
+    let message = greeting + `Departamento: ${department}\n\n`;
 
     let total = 0;
     cart.forEach((item, i) => {
@@ -1257,6 +1428,14 @@
     .addEventListener("click", (e) => {
       if (e.target.id === "productModalBackdrop") {
         closeProductModal();
+      }
+    });
+
+  document
+    .getElementById("imageZoomBackdrop")
+    .addEventListener("click", (e) => {
+      if (e.target.id === "imageZoomBackdrop") {
+        closeImageZoom();
       }
     });
 
