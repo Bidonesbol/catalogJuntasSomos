@@ -248,6 +248,12 @@
     .btn-outline:hover {
       background: rgb(236,65,131);
     }
+    .btn-soldout {
+      background: rgb(130,131,131);
+      border-color: rgb(130,131,131);
+      cursor: not-allowed;
+      box-shadow: none;
+    }
 
     .hero-panel {
       background: var(--card-bg);
@@ -927,8 +933,29 @@
 <script>
   // ⚠️ CAMBIA ESTE NÚMERO AL TUYO (sin +, sin espacios)
   const WHATSAPP_NUMBER = "59176666946";
-//const WHATSAPP_NUMBER = "59163199327";
+  //const WHATSAPP_NUMBER = "59163199327";
+
+  // Helpers for sold-out logic
+  function isProductSoldOut(product) {
+    // Product is sold out if the product flag is true OR all variants are sold out
+    if (product.soldOut) return true;
+    if (!product.variants || product.variants.length === 0) return false;
+    return product.variants.every(v => v.soldOut);
+  }
+
+  function isVariantSoldOut(product, variantId) {
+    const v = product.variants.find(v => v.id === variantId);
+    return v ? !!v.soldOut : false;
+  }
+
+  function getFirstAvailableVariant(product) {
+    if (!product.variants || product.variants.length === 0) return null;
+    const available = product.variants.find(v => !v.soldOut);
+    return available || product.variants[0];
+  }
+
   // Productos con imágenes según tus nombres de archivo
+  // Agregamos flags soldOut a nivel de producto y variante
   const products = [
     {
       id: "taza11",
@@ -936,12 +963,14 @@
       description: "Taza de cerámica 11 oz, ideal para café o té.",
       baseImageText: "Taza 11 oz",
       baseImage: "images/taza11-main.jpg",
+      soldOut: false, // marcar true si TODO el producto está agotado
       variants: [
         {
           id: "taza11-std",
           name: "Taza 11 oz",
           price: 60,
-          image: "images/taza11-std.jpg"
+          image: "images/taza11-std.jpg",
+          soldOut: false // marcar true si esta variante está agotada
         }
       ]
     },
@@ -951,12 +980,14 @@
       description: "Taza de cerámica 6 oz, perfecta para espresso o porciones pequeñas.",
       baseImageText: "Taza 6 oz",
       baseImage: "images/taza6-main.jpg",
+      soldOut: false,
       variants: [
         {
           id: "taza6-std",
           name: "Taza 6 oz",
           price: 50,
-          image: "images/taza6-std.jpg"
+          image: "images/taza6-std.jpg",
+          soldOut: false
         }
       ]
     },
@@ -966,18 +997,21 @@
       description: "Stickers con ilustraciones. Puedes pedir stickers sueltos o una hoja completa.",
       baseImageText: "Stickers individuales o en hoja",
       baseImage: "images/stickers-main.jpg",
+      soldOut: false,
       variants: [
         {
           id: "stickers-unit",
           name: "Sticker individual",
           price: 5,
-          image: "images/stickers-unit.jpg"
+          image: "images/stickers-unit.jpg",
+          soldOut: false
         },
         {
           id: "stickers-page",
           name: "Hoja completa de stickers",
           price: 20,
-          image: "images/stickers-page.jpg"
+          image: "images/stickers-page.jpg",
+          soldOut: false
         }
       ]
     },
@@ -987,24 +1021,28 @@
       description: "Pins con distintos diseños. Cualquier variante tiene el mismo precio.",
       baseImageText: "Pins con distintos diseños",
       baseImage: "images/pins-main.jpg",
+      soldOut: false,
       variants: [
         {
           id: "pins-var1",
           name: "Pin diseño A",
           price: 15,
-          image: "images/pins-var1.jpg"
+          image: "images/pins-var1.jpg",
+          soldOut: false
         },
         {
           id: "pins-var2",
           name: "Pin diseño B",
           price: 15,
-          image: "images/pins-var2.jpg"
+          image: "images/pins-var2.jpg",
+          soldOut: false
         },
         {
           id: "pins-var3",
           name: "Pin diseño C",
           price: 15,
-          image: "images/pins-var3.jpg"
+          image: "images/pins-var3.jpg",
+          soldOut: false
         }
       ]
     },
@@ -1014,12 +1052,14 @@
       description: "Toma todo (vaso/jarro especial). Cualquier diseño se maneja como la misma variante.",
       baseImageText: "Toma todo",
       baseImage: "images/toma-todo-main.jpg",
+      soldOut: false,
       variants: [
         {
           id: "toma-todo-std",
           name: "Toma todo",
           price: 100,
-          image: "images/toma-todo-std.jpg"
+          image: "images/toma-todo-std.jpg",
+          soldOut: false
         }
       ]
     },
@@ -1029,30 +1069,35 @@
       description: "Combos especiales con combinaciones de tazas, stickers y pins.",
       baseImageText: "Combos promocionales",
       baseImage: "images/combos-main.jpg",
+      soldOut: false,
       variants: [
         {
           id: "combo1",
           name: "Combo 1: Taza 11 oz + Sticker + Pin",
           price: 75,
-          image: "images/combo1.jpg"
+          image: "images/combo1.jpg",
+          soldOut: false
         },
         {
           id: "combo2",
           name: "Combo 2: Taza 6 oz + Sticker + Pin",
           price: 65,
-          image: "images/combo2.jpg"
+          image: "images/combo2.jpg",
+          soldOut: false
         },
         {
           id: "combo3",
           name: "Combo 3: Sticker + Pin",
           price: 15,
-          image: "images/combo3.jpg"
+          image: "images/combo3.jpg",
+          soldOut: false
         },
         {
           id: "combo4",
           name: "Combo 4: Taza 11 oz + Taza 6 oz + Sticker + Pin",
           price: 120,
-          image: "images/combo4.jpg"
+          image: "images/combo4.jpg",
+          soldOut: false
         }
       ]
     }
@@ -1068,6 +1113,7 @@
     products.forEach((product) => {
       const minPrice = Math.min(...product.variants.map((v) => v.price));
       const numVariants = product.variants.length;
+      const productSoldOut = isProductSoldOut(product);
 
       const card = document.createElement("article");
       card.className = "product-card";
@@ -1087,14 +1133,24 @@
             <span class="price-chip">Desde Bs ${minPrice}</span>
           </div>
           <div class="product-actions">
-            <button class="btn btn-outline" type="button"
-              onclick="openProductModal('${product.id}')">
-              Ver
-            </button>
-            <button class="btn btn-primary" type="button"
-              onclick="quickAddFirstVariant('${product.id}')">
-              Agregar rápido
-            </button>
+            ${
+              productSoldOut
+                ? `
+                  <button class="btn btn-soldout" type="button" disabled>
+                    Agotado
+                  </button>
+                `
+                : `
+                  <button class="btn btn-outline" type="button"
+                    onclick="openProductModal('${product.id}')">
+                    Ver
+                  </button>
+                  <button class="btn btn-primary" type="button"
+                    onclick="quickAddFirstVariant('${product.id}')">
+                    Agregar rápido
+                  </button>
+                `
+            }
           </div>
         </div>
       `;
@@ -1105,6 +1161,12 @@
   function openProductModal(productId) {
     const product = products.find((p) => p.id === productId);
     if (!product) return;
+
+    const productSoldOut = isProductSoldOut(product);
+    if (productSoldOut) {
+      alert("Este producto está agotado.");
+      return;
+    }
 
     currentProduct = product;
 
@@ -1121,18 +1183,32 @@
     quantityInput.value = 1;
     noteInput.value = "";
 
+    // Rellenar variantes considerando estado soldOut
     variantSelect.innerHTML = "";
     product.variants.forEach((variant) => {
       const option = document.createElement("option");
       option.value = variant.id;
-      option.textContent = `${variant.name} · Bs ${variant.price}`;
+
+      const soldText = variant.soldOut ? " (AGOTADO)" : "";
+      option.textContent = `${variant.name} · Bs ${variant.price}${soldText}`;
+      if (variant.soldOut) {
+        option.disabled = true;
+      }
+
       variantSelect.appendChild(option);
     });
 
-    const firstVariant = product.variants[0];
-    if (firstVariant && firstVariant.image) {
+    // Seleccionar la primera variante disponible
+    const firstAvailable = getFirstAvailableVariant(product);
+    if (firstAvailable) {
+      variantSelect.value = firstAvailable.id;
+    }
+
+    // Mostrar imagen de la variante seleccionada o base
+    const selectedVariant = product.variants.find(v => v.id === variantSelect.value);
+    if (selectedVariant && selectedVariant.image) {
       imageContainer.innerHTML = `
-        <img src="${firstVariant.image}" alt="${firstVariant.name}" />
+        <img src="${selectedVariant.image}" alt="${selectedVariant.name}" />
         <button type="button" class="modal-zoom-icon" aria-label="Ver imagen más grande" onclick="openImageZoom(event)">🔍</button>
       `;
       imageContainer.onclick = openImageZoom;
@@ -1169,7 +1245,7 @@
     );
     const qty = Math.max(1, parseInt(quantityInput.value, 10) || 1);
 
-    if (!variant) {
+    if (!variant || variant.soldOut) {
       pricePreview.textContent = "-";
       if (currentProduct.baseImage) {
         imageContainer.innerHTML = `
@@ -1240,6 +1316,13 @@
     const noteInput = document.getElementById("noteInput");
 
     const variantId = variantSelect.value;
+    const variant = currentProduct.variants.find(v => v.id === variantId);
+
+    if (!variant || variant.soldOut || currentProduct.soldOut) {
+      alert("Esta variante está agotada.");
+      return;
+    }
+
     const qty = Math.max(1, parseInt(quantityInput.value, 10) || 1);
     const note = noteInput.value.trim();
 
@@ -1257,12 +1340,22 @@
 
   function quickAddFirstVariant(productId) {
     const product = products.find((p) => p.id === productId);
-    if (!product || product.variants.length === 0) return;
+    if (!product) return;
 
-    const firstVariant = product.variants[0];
+    if (isProductSoldOut(product)) {
+      alert("Este producto está agotado.");
+      return;
+    }
+
+    const firstAvailable = getFirstAvailableVariant(product);
+    if (!firstAvailable || firstAvailable.soldOut) {
+      alert("Este producto está agotado.");
+      return;
+    }
+
     cart.push({
       productId: product.id,
-      variantId: firstVariant.id,
+      variantId: firstAvailable.id,
       quantity: 1,
       note: ""
     });
