@@ -1,4 +1,4 @@
-# 🛍️ JuntasSomos — Catálogo Web
+<file name=0 path=/Users/lanuit.grinder/Desktop/catalogJuntasSomos/README.md># 🛍️ JuntasSomos — Catálogo Web
 
 Este proyecto es un **catálogo web simple y ligero**, optimizado para compartirse en redes sociales (Facebook, Instagram, WhatsApp). No requiere servidor ni backend — funciona 100% con HTML, CSS y JavaScript.
 
@@ -204,6 +204,7 @@ El catálogo ahora incluye un sistema completo de analíticas con **Google Analy
 - `clear_cart` — cuando se vacía el carrito.
 - `open_image_zoom` — cuando amplía una imagen de producto.
 - `scroll_to_section` — cuando navega a secciones del sitio.
+- `click_social_link` — cuando un usuario hace clic en los enlaces de Facebook o Instagram en el pie de página.
 - `send_order_whatsapp` — **evento de conversión**, cuando envía el pedido por WhatsApp.
 
 ### 🛠 Cómo funciona
@@ -334,3 +335,4 @@ image: "images/pins-var1-new.jpg"
 
 ---
 
+</file>
