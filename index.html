@@ -224,7 +224,7 @@
     .pill {
       display: inline-FLEX;
       align-items: center;
-      gap: 0.4rem;
+      gap: 0.7rem;
       background:rgb(245,175,206);
       color:rgb(102,68,140)
       padding: 0.25rem 0.7rem;
@@ -359,16 +359,17 @@
     }
 
     .product-image {
+      height: 480px;
       background: linear-gradient(135deg, #eff6ff, #f9fafb);
       font-size: 0.85rem;
       color: var(--text);
       text-align: center;
-      padding: 0;
+      padding: 0.2;
     }
 
     .product-image img {
       width: 100%;
-      height: auto;
+      height: 480px;
       display: block;
       object-fit: cover;
     }
@@ -814,12 +815,13 @@
   <section id="home">
     <div>
       <div class="pill">
-        🎨 Tazas, stickers, pins y toma todo · Bolivia
+        💜 Apoyo solidario contra el cáncer de mama
       </div>
-      <h1>Haz tu pedido desde nuestro catálogo online.</h1>
+      <h1>Un nuevo abrazo desde nuestra amada Chiflería..</h1>
       <p class="lead">
-        Elige entre tazas, stickers, pins, toma todo y combos. Agrega al carrito y envía tu pedido por WhatsApp.
-        Nosotros coordinamos el pago y la entrega manualmente.
+        JUNTAS SOMOS nace del deseo de acompañarnos entre mujeres: sostenernos, escucharnos y celebrar la diversidad de nuestros cuerpos. Esta campaña surge del amor y la fuerza de quienes enfrentan el cáncer de mama, para generar conciencia y crear un fondo solidario que apoye a nuestras hermanas en sus procesos.
+        Cada compra suma a esta red de apoyo.<br />
+        ¡Gracias por ser parte!
       </p>
       <div class="hero-actions">
         <button class="btn btn-primary" onclick="scrollToSection('catalog')">
@@ -1068,13 +1070,21 @@
       baseImageText: "Taza 11 oz",
       baseImage: "images/taza11-main.jpg",
       soldOut: false, // marcar true si TODO el producto está agotado
-      variants: [
+      /* variants: [
         {
           id: "taza11-std",
           name: "Taza 11 oz",
           price: 60,
           image: "images/taza11-std.jpg",
           soldOut: false // marcar true si esta variante está agotada
+        }
+      ] */
+      variants: [
+        {
+          id: "taza11-single",
+          name: "Taza 11 oz",
+          price: 60,
+          image: "images/taza11-main.jpg"
         }
       ]
     },
@@ -1085,13 +1095,21 @@
       baseImageText: "Taza 6 oz",
       baseImage: "images/taza6-main.jpg",
       soldOut: false,
-      variants: [
+      /* variants: [
         {
           id: "taza6-std",
           name: "Taza 6 oz",
           price: 50,
           image: "images/taza6-std.jpg",
           soldOut: false
+        }
+      ] */
+      variants: [
+        {
+          id: "taza6-single",
+          name: "Taza 6 oz",
+          price: 50,
+          image: "images/taza6-main.jpg"
         }
       ]
     },
@@ -1102,7 +1120,7 @@
       baseImageText: "Stickers individuales o en hoja",
       baseImage: "images/stickers-main.jpg",
       soldOut: false,
-      variants: [
+      /* variants: [
         {
           id: "stickers-unit",
           name: "Sticker individual",
@@ -1117,6 +1135,14 @@
           image: "images/stickers-page.jpg",
           soldOut: false
         }
+      ] */
+      variants: [
+        {
+          id: "stickers-single",
+          name: "Stickers",
+          price: 5,
+          image: "images/stickers-main.jpg"
+        }
       ]
     },
     {
@@ -1126,7 +1152,7 @@
       baseImageText: "Pins con distintos diseños",
       baseImage: "images/pins-main.jpg",
       soldOut: false,
-      variants: [
+      /* variants: [
         {
           id: "pins-var1",
           name: "Pin diseño A",
@@ -1148,6 +1174,14 @@
           image: "images/pins-var3.jpg",
           soldOut: false
         }
+      ] */
+      variants: [
+        {
+          id: "pins-single",
+          name: "Pins",
+          price: 15,
+          image: "images/pins-main.jpg"
+        }
       ]
     },
     {
@@ -1157,13 +1191,21 @@
       baseImageText: "Toma todo",
       baseImage: "images/toma-todo-main.jpg",
       soldOut: false,
-      variants: [
+      /* variants: [
         {
           id: "toma-todo-std",
           name: "Toma todo",
           price: 100,
           image: "images/toma-todo-std.jpg",
           soldOut: false
+        }
+      ] */
+      variants: [
+        {
+          id: "toma-todo-single",
+          name: "Toma todo",
+          price: 100,
+          image: "images/toma-todo-main.jpg"
         }
       ]
     },
@@ -1174,7 +1216,7 @@
       baseImageText: "Combos promocionales",
       baseImage: "images/combos-main.jpg",
       soldOut: false,
-      variants: [
+      /* variants: [
         {
           id: "combo1",
           name: "Combo 1: Taza 11 oz + Sticker + Pin",
@@ -1202,6 +1244,14 @@
           price: 120,
           image: "images/combo4.jpg",
           soldOut: false
+        }
+      ] */
+      variants: [
+        {
+          id: "combos-single",
+          name: "Combos",
+          price: 75,
+          image: "images/combos-main.jpg"
         }
       ]
     }
